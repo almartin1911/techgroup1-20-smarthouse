@@ -1,7 +1,9 @@
 package jalasoft.training.mcallejash.smarthouse.core;
 
+import jalasoft.training.mcallejash.smarthouse.core.impl.Manager;
+
 public interface IHub {
-    void linkManager(IDevice device);
-    void unlinkManager(IDevice device);
-    void triggerActions(boolean value);
+    void linkManager(Manager manager);
+    void unlinkManager(Manager manager);
+    void setManagersStatuses(boolean value);
 }

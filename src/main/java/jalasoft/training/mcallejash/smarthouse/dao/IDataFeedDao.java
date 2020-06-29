@@ -1,7 +1,9 @@
 package jalasoft.training.mcallejash.smarthouse.dao;
 
-import jalasoft.training.mcallejash.smarthouse.core.*;
+import jalasoft.training.mcallejash.smarthouse.core.impl.Hub;
+
+import java.util.List;
 
 public interface IDataFeedDao {
-    IHub GetData();
+    List<Hub> GetHubs();
 }

@@ -1,12 +1,17 @@
 package jalasoft.training.mcallejash.smarthouse.core;
 
-public abstract class BaseEntity {
-    private String name;
-    private boolean powered;
+import io.jsondb.annotation.Id;
 
-    protected BaseEntity(String name, boolean powered){
-        this.name = name;
-        this.powered = powered;
+import java.util.UUID;
+
+public abstract class BaseEntity {
+    @Id
+    private UUID id;
+    private String name;
+    private boolean on;
+    private String statusMsg;
+
+    protected BaseEntity() {
     }
 
     public String getName() {
@@ -17,11 +22,27 @@ public abstract class BaseEntity {
         this.name = name;
     }
 
-    public boolean isPowered() {
-        return powered;
+    public boolean isOn() {
+        return on;
     }
 
-    public void setPowered(boolean powered) {
-        this.powered = powered;
+    public void setOn(boolean on) {
+        this.on = on;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getStatusMsg() {
+        return statusMsg;
+    }
+
+    public void setStatusMsg(String statusMsg) {
+        this.statusMsg = statusMsg;
     }
 }

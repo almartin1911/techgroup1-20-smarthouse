@@ -1,37 +1,74 @@
 package jalasoft.training.mcallejash.smarthouse.dao.stub;
 
+import jalasoft.training.mcallejash.smarthouse.core.DeviceType;
+import jalasoft.training.mcallejash.smarthouse.core.ManagerType;
+import jalasoft.training.mcallejash.smarthouse.core.impl.Device;
+import jalasoft.training.mcallejash.smarthouse.core.impl.Hub;
+import jalasoft.training.mcallejash.smarthouse.core.impl.Manager;
 import jalasoft.training.mcallejash.smarthouse.dao.IDataFeedDao;
-import jalasoft.training.mcallejash.smarthouse.core.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DataFeedStubDao implements IDataFeedDao {
-    private List<IDevice> devices;
-    private List<IManager> managers;
-    private IHub hub;
+    private List<Hub> hubs;
 
     public DataFeedStubDao(){
-        this.devices = new ArrayList<IDevice>();
-        this.managers = new ArrayList<IManager>();
+        this.hubs = new ArrayList<>();
+        List<Manager> managers = new ArrayList<>();
 
-        SmartSpeakerDevice huaweiSpeaker = new SmartSpeakerDevice("Speaker-HW100", (short) 30);
-        SmartCurtainDevice pangolinCurtain = new SmartCurtainDevice("Curtain-PG1");
-        MovementSensorManager mainDoorMovementSensor = new MovementSensorManager("Sensor-Movement");
-        mainDoorMovementSensor.linkDevice(huaweiSpeaker);
-        mainDoorMovementSensor.linkDevice(pangolinCurtain);
+        Device huaweiSpeaker = CreateDevice("HW100", DeviceType.Speaker);
+        Device pangolinCurtain = CreateDevice("PG-01b", DeviceType.Curtain);
+        Device sonyTV = CreateDevice("SX7000", DeviceType.TV);
+        Device philipsLightbulb = CreateDevice("LGB-jk9", DeviceType.Lightbulb);
 
-        SmartSpeakerDevice sonySpeaker = new SmartSpeakerDevice("Speaker-SONY3x", (short) 0);
-        SmartphoneManager smartphoneAppManager = new SmartphoneManager("Smartphone-GalaxyNote9", (float) 3.2);
-        smartphoneAppManager.linkDevice(sonySpeaker);
+        List<Device> devicesSlice1 = new ArrayList<>();
+        devicesSlice1.add(huaweiSpeaker);
+        devicesSlice1.add(pangolinCurtain);
+        Manager mainDoorMovementSensor = CreateManager("Movement-MainDoor", ManagerType.Sensor, devicesSlice1);
+        managers.add(mainDoorMovementSensor);
 
-        this.hub = new HouseHub("Martin's Cave");
-        this.hub.linkManager(mainDoorMovementSensor);
-        this.hub.linkManager(smartphoneAppManager);
+        List<Device> devicesSlice2 = new ArrayList<>();
+        devicesSlice2.add(sonyTV);
+        devicesSlice2.add(philipsLightbulb);
+        Manager smartphoneSamsung = CreateManager("Smartphone-Samsung", ManagerType.Smartphone, devicesSlice2);
+        managers.add(smartphoneSamsung);
+
+        Hub smartHouse = CreateHub("Martin's SmartCave", managers);
+        this.hubs.add(smartHouse);
+    }
+
+    private Device CreateDevice(String name, DeviceType deviceType){
+        Device newDevice = new Device();
+        newDevice.setId(UUID.randomUUID());
+        newDevice.setName(name);
+        newDevice.setDeviceType(deviceType);
+        newDevice.setStatusMsg(newDevice.toString());
+        return newDevice;
+    }
+
+
+    private Manager CreateManager(String name, ManagerType managerType, List<Device> devices){
+        Manager newManager = new Manager();
+        newManager.setId(UUID.randomUUID());
+        newManager.setName(name);
+        newManager.setManagerType(managerType);
+        newManager.setDevices(devices);
+        newManager.setStatusMsg(newManager.toString());
+        return newManager;
+    }
+
+    private Hub CreateHub(String name, List<Manager> managers){
+        Hub newHub = new Hub();
+        newHub.setId(UUID.randomUUID());
+        newHub.setName(name);
+        newHub.setManagers(managers);
+        return newHub;
     }
 
     @Override
-    public IHub GetData() {
-        return this.hub;
+    public List<Hub> GetHubs() {
+        return this.hubs;
     }
 }
